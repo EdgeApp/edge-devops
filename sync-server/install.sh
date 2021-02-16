@@ -1,7 +1,5 @@
 ## curl -o- https://raw.githubusercontent.com/EdgeApp/edge-devops/master/sync-server/install.sh
 
-curl -o- https://raw.githubusercontent.com/EdgeApp/edge-devops/master/install-couch-caddy-digitalocean.sh | bash
-
 echo "Creating app directories..."
 mkdir /apps
 chown edgy:edgy /apps
