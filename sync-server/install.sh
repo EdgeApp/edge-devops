@@ -1,10 +1,22 @@
 ## curl -o- https://raw.githubusercontent.com/EdgeApp/edge-devops/master/sync-server/install.sh
 
-echo "Creating app directories..."
-mkdir /apps
-chown edgy:edgy /apps
-mkdir /tmp/apps
-chown edgy:edgy /tmp/apps
+# Install NodeJS/NPM LTS
+echo "Installing NodeJS/NPM..."
+curl -fsSL https://deb.nodesource.com/setup_14.x | bash
+apt-get install -y nodejs
 
+# Install yarn
+echo "Installing Yarn..."
+npm i -g yarn
+
+# Install PM2
+echo "Installing PM2..."
+npm i -g pm2
+
+# Install edge-sync-server
 echo "Provisioning sync server as edgy user..."
-sudo -i -u edgy bash -c 'bash <(curl -o- https://raw.githubusercontent.com/EdgeApp/edge-devops/master/sync-server/provisions.sh)'
+sudo -i -u edgy bash -c 'bash <(curl -o- https://raw.githubusercontent.com/EdgeApp/edge-devops/master/sync-server/install-sync-server.sh)'
+
+# Setup PM2 to resurrect on startup
+echo "Setting up PM2 startup..."
+env PATH=$PATH:/usr/bin /usr/lib/node_modules/pm2/bin/pm2 startup systemd -u edgy --hp /home/edgy
