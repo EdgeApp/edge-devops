@@ -1,4 +1,4 @@
-## bash <(curl -o- https://raw.githubusercontent.com/EdgeApp/edge-devops/master/edge-sync/install-sync-server.sh)
+## curl -o- https://raw.githubusercontent.com/EdgeApp/edge-devops/master/sync-server/install-sync-server.sh | bash
 
 # Recommended to be run as edgy user
 

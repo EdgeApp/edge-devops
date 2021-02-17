@@ -1,4 +1,4 @@
-## curl -o- https://raw.githubusercontent.com/EdgeApp/edge-devops/master/sync-server/install.sh
+## curl -o- https://raw.githubusercontent.com/EdgeApp/edge-devops/master/sync-server/install.sh | bash
 
 # Install NodeJS/NPM LTS
 echo "Installing NodeJS/NPM..."
@@ -15,7 +15,7 @@ npm i -g pm2
 
 # Install edge-sync-server
 echo "Provisioning sync server as edgy user..."
-sudo -i -u edgy bash -c 'bash <(curl -o- https://raw.githubusercontent.com/EdgeApp/edge-devops/master/sync-server/install-sync-server.sh)'
+sudo -i -u edgy bash -c 'curl -o- https://raw.githubusercontent.com/EdgeApp/edge-devops/master/sync-server/install-sync-server.sh | bash'
 
 # Setup PM2 to resurrect on startup
 echo "Setting up PM2 startup..."
