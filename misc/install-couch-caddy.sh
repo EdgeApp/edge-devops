@@ -13,6 +13,13 @@ sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 8756C4F765C9AC3CB6
 echo "deb [trusted=yes] https://apt.fury.io/caddy/ /" | sudo tee -a /etc/apt/sources.list.d/caddy-fury.list
 
 sudo apt update -y
+sudo apt install -y debconf-utils
+echo "couchdb couchdb/adminpass password $COUCH_PASSWORD" | debconf-set-selections
+echo "couchdb couchdb/adminpass_again password $COUCH_PASSWORD" | debconf-set-selections
+echo "couchdb couchdb/nodename string $COUCH_NODE_NAME" | debconf-set-selections
+echo "couchdb couchdb/cookie string $COUCH_COOKIE" | debconf-set-selections
+echo "couchdb couchdb/bindaddress string 0.0.0.0" | debconf-set-selections
+echo "couchdb couchdb/mode select clustered" | debconf-set-selections
 sudo apt install -y couchdb
 
 sudo systemctl stop couchdb
