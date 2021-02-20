@@ -16,7 +16,7 @@ sudo apt update -y
 sudo apt install -y debconf-utils
 echo "couchdb couchdb/adminpass password $COUCH_PASSWORD" | debconf-set-selections
 echo "couchdb couchdb/adminpass_again password $COUCH_PASSWORD" | debconf-set-selections
-echo "couchdb couchdb/nodename string $COUCH_NODE_NAME" | debconf-set-selections
+echo "couchdb couchdb/nodename string couchdb@$(hostname)-int.edge.app" | debconf-set-selections
 echo "couchdb couchdb/cookie string $COUCH_COOKIE" | debconf-set-selections
 echo "couchdb couchdb/bindaddress string 0.0.0.0" | debconf-set-selections
 echo "couchdb couchdb/mode select clustered" | debconf-set-selections

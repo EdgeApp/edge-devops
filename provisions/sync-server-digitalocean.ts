@@ -165,7 +165,6 @@ const SSH_KEY_IDS: number[] = (await Checkbox.prompt({
 
 // Couch Info:
 
-const COUCH_NODE_NAME = `couchdb@${DOMAIN_INTERNAL}`;
 const COUCH_PASSWORD = await Secret.prompt("CouchDB password");
 const COUCH_COOKIE = await Secret.prompt("CouchDB master cookie");
 
@@ -174,7 +173,6 @@ const COUCH_COOKIE = await Secret.prompt("CouchDB master cookie");
 const scriptUrl = new URL("../install-sync-digitalocean.sh", import.meta.url);
 const scriptContent = await getFile(scriptUrl);
 const SCRIPT = `#!/bin/bash
-export COUCH_NODE_NAME="${COUCH_NODE_NAME}"
 export COUCH_PASSWORD="${COUCH_PASSWORD}"
 export COUCH_COOKIE="${COUCH_COOKIE}"
 ${scriptContent}
