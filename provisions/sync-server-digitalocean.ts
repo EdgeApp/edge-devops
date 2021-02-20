@@ -3,6 +3,7 @@
 import {
   Checkbox,
   Input,
+  Number,
   Secret,
   Select,
 } from "https://deno.land/x/cliffy@v0.17.2/prompt/mod.ts";
@@ -85,6 +86,14 @@ if (domainRecords.length > 0) {
     }
   }
 }
+
+// Volume Size:
+
+const VOLUME_SIZE: number = (await Number.prompt({
+  message: "Volume size (GB)",
+  min: 0,
+  max: 2000,
+}));
 
 // Regions:
 
@@ -171,9 +180,34 @@ export COUCH_COOKIE="${COUCH_COOKIE}"
 ${scriptContent}
 `;
 
+// Create Volume:
+
+const volumeName = `volume--${DOMAIN.replace(/\./g, "-dot-")}`;
+
+console.log(`Creating volume '${volumeName}'...`);
+
+const createVolumeRes = await fetch("https://api.digitalocean.com/v2/volumes", {
+  method: "POST",
+  headers,
+  body: JSON.stringify({
+    size_gigabytes: VOLUME_SIZE,
+    name: volumeName,
+    region: REGION,
+  }),
+});
+
+if (createVolumeRes.status !== 201) {
+  console.error(await createVolumeRes.text());
+  Deno.exit(1);
+}
+
+const createVolumeResBody = await createVolumeRes.json();
+
+const volumeId = createVolumeResBody.volume.id;
+
 // Create Droplet:
 
-console.log("Creating droplet....");
+console.log(`Creating droplet '${DOMAIN}'....`);
 
 const createDropletRes = await fetch(
   "https://api.digitalocean.com/v2/droplets",
@@ -186,6 +220,7 @@ const createDropletRes = await fetch(
       size: SIZE,
       ssh_keys: SSH_KEY_IDS,
       user_data: SCRIPT,
+      volumes: [volumeId],
       image: "ubuntu-20-04-x64",
       ipv6: true,
       monitoring: true,
