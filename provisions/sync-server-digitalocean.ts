@@ -134,7 +134,7 @@ const sizes: Size[] = sizesResBody.sizes.filter((
 ) => regionSizeSlugs.includes(size.slug) && size.available);
 
 const SIZE: string = (await Select.prompt({
-  message: "Select Region",
+  message: "Select Droplet Size",
   options: sizes.map((
     size,
   ) => ({
