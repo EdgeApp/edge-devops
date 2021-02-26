@@ -173,6 +173,7 @@ const COUCH_COOKIE = await Secret.prompt("CouchDB master cookie");
 const scriptUrl = new URL("../install-sync-digitalocean.sh", import.meta.url);
 const scriptContent = await getFile(scriptUrl);
 const SCRIPT = `#!/bin/bash
+export COUCH_MODE="clustered"
 export COUCH_PASSWORD="${COUCH_PASSWORD}"
 export COUCH_COOKIE="${COUCH_COOKIE}"
 ${scriptContent}

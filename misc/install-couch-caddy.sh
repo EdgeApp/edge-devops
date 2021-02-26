@@ -19,7 +19,7 @@ echo "couchdb couchdb/adminpass_again password $COUCH_PASSWORD" | debconf-set-se
 echo "couchdb couchdb/nodename string couchdb@$(hostname)-int.edge.app" | debconf-set-selections
 echo "couchdb couchdb/cookie string $COUCH_COOKIE" | debconf-set-selections
 echo "couchdb couchdb/bindaddress string 0.0.0.0" | debconf-set-selections
-echo "couchdb couchdb/mode select clustered" | debconf-set-selections
+echo "couchdb couchdb/mode select $COUCH_MODE" | debconf-set-selections
 sudo apt install -y couchdb
 
 sudo systemctl stop couchdb
