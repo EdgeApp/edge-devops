@@ -1,4 +1,12 @@
-// deno run --allow-net --allow-read --unstable https://raw.githubusercontent.com/EdgeApp/edge-devops/master/provisions/sync-server-digitalocean.ts
+/*
+deno run \
+  --allow-net \
+  --allow-read \
+  --unstable \
+  --lock=<(curl -o- https://raw.githubusercontent.com/EdgeApp/edge-devops/master/provisions/lock.json) \
+  --cached-only \
+  https://raw.githubusercontent.com/EdgeApp/edge-devops/master/provisions/sync-server-digitalocean.ts
+*/
 
 import {
   Checkbox,
