@@ -13,6 +13,10 @@ npm i -g yarn
 echo "Installing PM2..."
 npm i -g pm2
 
+# Install ab-sync util
+curl https://github.com/EdgeApp/airbitz-sync-server/raw/master/staging/ab-sync -o /usr/local/bin/ab-sync
+chmod 755 /usr/local/bin/ab-sync
+
 # Install edge-sync-server
 echo "Provisioning sync server as edgy user..."
 sudo -i -u edgy bash -c 'curl -o- https://raw.githubusercontent.com/EdgeApp/edge-devops/master/sync-server/install-sync-server.sh | bash'
