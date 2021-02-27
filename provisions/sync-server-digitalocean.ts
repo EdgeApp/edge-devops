@@ -16,15 +16,17 @@ import {
   Select,
 } from "https://deno.land/x/cliffy@v0.17.2/prompt/mod.ts";
 
-const TLD = "edge.app"; // Top-level domain
 const TAG = "sync";
 
-const TOKEN = await Secret.prompt("DigitalOcean API key");
+const TOKEN = await Secret.prompt({
+  message: "DigitalOcean API key",
+  validate: (v) => v.trim() !== "",
+});
 
-if (TOKEN === "") {
-  console.error("Invalid DigitalOcean API key");
-  Deno.exit(1);
-}
+const TLD = await Input.prompt({
+  message: "Enter top-level domain",
+  default: "edge.app",
+}); // Top-level domain
 
 const headers = {
   "Content-Type": "application/json",
@@ -33,13 +35,11 @@ const headers = {
 
 // Hostname and Domain Name:
 
-const HOST = await Input.prompt(`Hostname (<hostname>.${TLD})`);
+const HOST = await Input.prompt({
+  message: `Hostname (<hostname>.${TLD})`,
+  validate: (v) => /^[\w\d\-]+$/.test(v),
+});
 const DOMAIN = `${HOST}.${TLD}`;
-
-if (HOST.trim() === "") {
-  console.error(`Invalid hostname '${HOST}'`);
-  Deno.exit(1);
-}
 
 // Internal Hostname and Domain name:
 
@@ -180,8 +180,14 @@ const SSH_KEY_IDS: number[] = (await Checkbox.prompt({
 
 // Couch Info:
 
-const COUCH_PASSWORD = await Secret.prompt("CouchDB password");
-const COUCH_COOKIE = await Secret.prompt("CouchDB master cookie");
+const COUCH_PASSWORD = await Secret.prompt({
+  message: "CouchDB password",
+  validate: (v) => v.trim() !== "",
+});
+const COUCH_COOKIE = await Secret.prompt({
+  message: "CouchDB master cookie",
+  validate: (v) => v.trim() !== "",
+});
 
 // User Data Script:
 
