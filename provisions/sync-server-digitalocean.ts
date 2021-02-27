@@ -48,6 +48,13 @@ const bottomLevel = hostnameLevels.shift();
 const HOST_INTERNAL = [`${bottomLevel}-int`, ...hostnameLevels].join(".");
 const DOMAIN_INTERNAL = `${HOST_INTERNAL}.${TLD}`;
 
+// Check droplet name:
+
+if (await isDropletNameUsed(DOMAIN)) {
+  console.error(`Droplet name already used`);
+  Deno.exit(1);
+}
+
 // Check domain records:
 
 const domainRecords = await getDomainRecords([DOMAIN, DOMAIN_INTERNAL]);
@@ -360,4 +367,35 @@ async function getDomainRecords(domains: string[]): Promise<DomainRecord[]> {
         ).then((res) => res.json()),
     ),
   )).flatMap((response) => response.domain_records);
+}
+
+async function isDropletNameUsed(dropletName: string): Promise<boolean> {
+  const paginator = (url: string): Promise<{ droplets: { name: string }[] }> =>
+    fetch(
+      url,
+      {
+        method: "GET",
+        headers,
+      },
+    ).then((res) => res.json()).then(async (res) =>
+      res.links?.pages?.next != null
+        ? {
+          ...res,
+          droplets: [
+            ...res.droplets,
+            ...await paginator(res.links.pages.next).then((res) =>
+              res.droplets
+            ),
+          ],
+        }
+        : res
+    );
+
+  const getDropletResponse = await paginator(
+    `https://api.digitalocean.com/v2/droplets?per_page=200`,
+  );
+
+  const droplets: { name: string }[] = getDropletResponse.droplets;
+
+  return droplets.some(({ name }) => name === dropletName);
 }
