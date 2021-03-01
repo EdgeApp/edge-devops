@@ -71,12 +71,8 @@ if (domainRecords.length > 0) {
           value: "exit",
         },
         {
-          name: "Keep",
-          value: "keep",
-        },
-        {
-          name: "Delete",
-          value: "delete",
+          name: "Replace",
+          value: "replace",
         },
       ],
     });
@@ -85,7 +81,7 @@ if (domainRecords.length > 0) {
       Deno.exit(0);
     }
 
-    if (action === "delete") {
+    if (action === "replace") {
       const res = await fetch(
         `https://api.digitalocean.com/v2/domains/${TLD}/records/${domainRecord.id}`,
         {
