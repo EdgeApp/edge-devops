@@ -3,9 +3,9 @@ deno run \
   --allow-net \
   --allow-read \
   --unstable \
-  --lock=<(curl -o- https://raw.githubusercontent.com/EdgeApp/edge-devops/master/provisions/lock.json) \
+  --lock=<(curl -o- https://raw.githubusercontent.com/EdgeApp/edge-devops/master/provisions/sync-server-digitalocean/lock.json) \
   --cached-only \
-  https://raw.githubusercontent.com/EdgeApp/edge-devops/master/provisions/sync-server-digitalocean.ts
+  https://raw.githubusercontent.com/EdgeApp/edge-devops/master/provisions/sync-server-digitalocean/index.ts
 */
 
 import {
