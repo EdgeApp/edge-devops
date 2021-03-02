@@ -1,0 +1,9 @@
+{
+  "topLevelDomain": "edge.app",
+  "hostname": "my-server",
+  "volumeSizeGb": 10,
+  "region": "sfo3",
+  "dropletSize": "s-1vcpu-1gb",
+  "couchPassword": "password123",
+  "couchMasterCookie": "monster"
+}

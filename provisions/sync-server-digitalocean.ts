@@ -15,18 +15,43 @@ import {
   Secret,
   Select,
 } from "https://deno.land/x/cliffy@v0.17.2/prompt/mod.ts";
+import { parseFlags } from "https://deno.land/x/cliffy@v0.17.2/flags/mod.ts";
+import { asConfg, Config } from "./config.ts";
+import {
+  asEither,
+  asString,
+  asUndefined,
+} from "https://deno.land/x/cleaners@v0.3.6/mod.ts";
+
+// Config file:
+
+let config: Config | undefined;
+
+const { flags } = parseFlags(Deno.args);
+const configFileName = asEither(asString, asUndefined)(flags.config);
+
+if (configFileName != null) {
+  const configFileContent = await Deno.readTextFile(configFileName);
+  config = asConfg(JSON.parse(configFileContent));
+}
+
+// Tag:
 
 const TAG = "sync";
 
-const TOKEN = await Secret.prompt({
+// Token:
+
+const TOKEN = config?.digitalOceanToken ?? await Secret.prompt({
   message: "DigitalOcean API key",
   validate: (v) => v.trim() !== "",
 });
 
-const TLD = await Input.prompt({
+// Top-level Domain:
+
+const TLD = config?.topLevelDomain ?? await Input.prompt({
   message: "Enter top-level domain",
   default: "edge.app",
-}); // Top-level domain
+});
 
 const headers = {
   "Content-Type": "application/json",
@@ -35,7 +60,7 @@ const headers = {
 
 // Hostname and Domain Name:
 
-const HOST = await Input.prompt({
+const HOST = config?.hostname ?? await Input.prompt({
   message: `Hostname (<hostname>.${TLD})`,
   validate: (v) => /^[\w\d\-]+$/.test(v),
 });
@@ -100,11 +125,11 @@ if (domainRecords.length > 0) {
 
 // Volume Size:
 
-const VOLUME_SIZE: number = (await Number.prompt({
+const VOLUME_SIZE = config?.volumeSizeGb ?? await Number.prompt({
   message: "Volume size (GB)",
   min: 0,
   max: 2000,
-}));
+});
 
 // Regions:
 
@@ -115,7 +140,7 @@ const regionsResBody = await fetch(
   },
 ).then((res) => res.json());
 
-const REGION: string = (await Select.prompt({
+const REGION = config?.region ?? (await Select.prompt({
   message: "Select Region",
   options: regionsResBody.regions.map((
     obj: { name: string; slug: string },
@@ -144,7 +169,7 @@ const sizes: Size[] = sizesResBody.sizes.filter((
   size: Size,
 ) => regionSizeSlugs.includes(size.slug) && size.available);
 
-const SIZE: string = (await Select.prompt({
+const SIZE = config?.dropletSize ?? (await Select.prompt({
   message: "Select Droplet Size",
   options: sizes.map((
     size,
@@ -176,11 +201,11 @@ const SSH_KEY_IDS: number[] = (await Checkbox.prompt({
 
 // Couch Info:
 
-const COUCH_PASSWORD = await Secret.prompt({
+const COUCH_PASSWORD = config?.couchPassword ?? await Secret.prompt({
   message: "CouchDB password",
   validate: (v) => v.trim() !== "",
 });
-const COUCH_COOKIE = await Secret.prompt({
+const COUCH_COOKIE = config?.couchMasterCookie ?? await Secret.prompt({
   message: "CouchDB master cookie",
   validate: (v) => v.trim() !== "",
 });
