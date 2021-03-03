@@ -11,7 +11,7 @@ echo "Installing edge-sync-server..."
 cd edge-sync-server
 yarn
 # Run setup for configuration
-yarn setup -p $COUCH_PASSWORD
+yarn setup
 
 echo "Starting edge-sync-server..."
 pm2 start --name=edge-sync-server lib/index.js
