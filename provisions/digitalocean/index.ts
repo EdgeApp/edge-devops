@@ -60,6 +60,10 @@ let SCRIPT: string | undefined;
 if (config?.installScripts != null) {
   const ENV = config?.env ?? {};
 
+  const GITKEY = config?.gitSshKey
+    ? await Deno.readTextFile(config?.gitSshKey)
+    : "";
+
   const scripts = await Promise.all(
     config.installScripts.map(async (installScript) => {
       // Env Var:
@@ -89,6 +93,7 @@ if (config?.installScripts != null) {
         {
           ...ENV,
           ...installScript.env,
+          GITKEY,
           TLD,
           COUCH_MODE,
           COUCH_PASSWORD,

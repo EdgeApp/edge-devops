@@ -5,6 +5,7 @@
   "volumeSizeGb": 10,
   "region": "sfo3",
   "dropletSize": "s-1vcpu-1gb",
+  "gitSshKey": "/Users/edgy/.ssh/provisions/key",
   "couchPassword": "password123",
   "couchMasterCookie": "monster",
   "couchClusterSeedList": [
@@ -23,7 +24,7 @@
     {
       "location": "edge-server/install.ubuntu.sh",
       "env": {
-        "PROJECT_URL": "https://github.com/EdgeApp/project-name.git"
+        "PROJECT_URL": "git@github.com:EdgeApp/project-name.git"
       }
     }
   ],

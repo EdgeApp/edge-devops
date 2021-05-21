@@ -25,6 +25,7 @@ export const asConfg = asObject({
   couchMasterCookie: asOptional(asString),
   couchClusterSeedList: asArray(asString),
   sshKeyNames: asOptional(asArray(asString)),
+  gitSshKey: asOptional(asString),
   installScripts: asOptional(asArray(asInstallScript)),
   env: asOptional(asMap(asString)),
 });
